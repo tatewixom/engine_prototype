@@ -1,6 +1,6 @@
 //Introduction
 
-This is the first file in the prototype_engine project. This file is meant to outline what this project is about and the scope of what's to be accomplished. 
+This is the first file in the engine_prototype project. This file is meant to outline what this project is about and the scope of what's to be accomplished. 
 The engine isn't meant to be a multi-purpose engine, but an engine that meets the needs of a game revolving around the story of "Stairs to Hell". 
 This story is a self-written one that revolves around a war between angels allied with humans against the gods. 
 I want this game to be a role-playing, open world, combat-intensive type of game.
