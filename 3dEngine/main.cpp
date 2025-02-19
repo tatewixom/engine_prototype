@@ -157,7 +157,7 @@ int main()
   //init glew (glew needs window and opengl context)
   glewExperimental = GL_TRUE;
 
-  //error
+  //error handling
   if (glewInit() != GLEW_OK)
   {
     std::cerr << "ERROR::MAIN.CPP::GLEW_INIT_FAILED" << std::endl;
