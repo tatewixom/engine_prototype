@@ -1,5 +1,10 @@
 #include "Engine.h"
 
+void framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
+{
+  glViewport(0, 0, fbW, fbH);
+}
+
 void Engine::initialize()
 {
   //init glfw
@@ -50,11 +55,6 @@ void Engine::initialize()
   {
     glfwTerminate();
   }
-}
-
-void Engine::framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
-{
-  glViewport(0, 0, fbW, fbH);
 }
 
 bool Engine::loadShaders(GLuint& program)
@@ -166,6 +166,8 @@ bool Engine::loadShaders(GLuint& program)
 
 void Engine::processInput(GLFWwindow* window)
 {
+  glfwPollEvents();
+
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
   {
     glfwSetWindowShouldClose(window, true);

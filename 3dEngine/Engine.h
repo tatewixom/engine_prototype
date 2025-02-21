@@ -7,14 +7,15 @@ class Engine
 private:
 
 public:
+  //framebuffer_resize_callback exists here
   void initialize();
-  void framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH);
   bool loadShaders(GLuint& program);
   void processInput(GLFWwindow* window);
   void render();
   void cleanUp();
   void run();
 
+  //member variables
   GLFWwindow* window;
   GLuint core_program;
 };
