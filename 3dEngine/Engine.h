@@ -7,7 +7,8 @@ class Engine
 private:
 
 public:
-  //framebuffer_resize_callback exists here
+  //non-class functions pre-exist here
+
   void initialize();
   bool loadShaders(GLuint& program);
   void processInput(GLFWwindow* window);

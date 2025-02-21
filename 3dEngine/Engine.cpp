@@ -1,9 +1,13 @@
 #include "Engine.h"
 
+//non-class functions
+
 void framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
 {
   glViewport(0, 0, fbW, fbH);
 }
+
+//engine class functions
 
 void Engine::initialize()
 {
