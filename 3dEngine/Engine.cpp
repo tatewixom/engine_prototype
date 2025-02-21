@@ -67,8 +67,8 @@ bool Engine::loadShaders(GLuint& program)
   char infoLog[512];
   GLint success;
 
-  std::string temp = "";
-  std::string src = "";
+  std::string temp{};
+  std::string src{};
 
   std::ifstream in_file;
 
