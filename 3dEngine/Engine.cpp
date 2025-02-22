@@ -1,8 +1,11 @@
 #include "Engine.h"
 
+//matrix members
+glm::mat4 ModelMatrix(1.f);
+
 //non-class functions/arrays
 
-void framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
+void static framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
 {
   glViewport(0, 0, fbW, fbH);
 }
@@ -186,7 +189,7 @@ void Engine::initialize()
   //texture 1
   int image_width1{};
   int image_height1{};
-  unsigned char* image1 = SOIL_load_image("Assets/Images/blankpaper.png", &image_width1, &image_height1, NULL, SOIL_LOAD_RGBA);
+  unsigned char* image1 = SOIL_load_image("Assets/Images/cardboard.png", &image_width1, &image_height1, NULL, SOIL_LOAD_RGBA);
 
   glGenTextures(1, &texture1);
   glBindTexture(GL_TEXTURE_2D, texture1);
@@ -218,6 +221,21 @@ void Engine::initialize()
   glBindTexture(GL_TEXTURE_2D, 0);
   //removes image data from memory used in SOIL_load_image call
   SOIL_free_image_data(image1);
+
+  //MATRIX
+  ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.f, 0.f, 0.f));
+  //you can choose if you want to rotate along x, y, and/or z axis
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(50.f), glm::vec3(1.f, 0.f, 0.f)); //x 
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(0.f), glm::vec3(0.f, 1.f, 0.f)); //y
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(0.f), glm::vec3(1.f, 0.f, 1.f)); //z
+  ModelMatrix = glm::scale(ModelMatrix, glm::vec3(1.f));
+
+  glUseProgram(core_program);
+
+  //GL_FALSE is set to false because that is an option for transposing matrices
+  glUniformMatrix4fv(glGetUniformLocation(core_program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+
+  glUseProgram(0);
 }
 
 bool Engine::loadShaders(GLuint& program)
@@ -350,6 +368,16 @@ void Engine::render()
   //update uniforms; makes it so the variable 'texture0' is assigned a value
   glUniform1i(glGetUniformLocation(core_program, "texture0"), 0);
   glUniform1i(glGetUniformLocation(core_program, "texture1"), 1);
+
+  //move, rotate, and scale
+  ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.f, 0.f, 0.f));
+  //you can choose if you want to rotate along x, y, and/or z axis
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(3.f), glm::vec3(1.f, 0.f, 0.f)); //x 
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(2.f), glm::vec3(0.f, 1.f, 0.f)); //y
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(5.f), glm::vec3(0.f, 0.f, 1.f)); //z
+  ModelMatrix = glm::scale(ModelMatrix, glm::vec3(1.f));
+
+  glUniformMatrix4fv(glGetUniformLocation(core_program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
 
   //activate texture
   glActiveTexture(GL_TEXTURE0);

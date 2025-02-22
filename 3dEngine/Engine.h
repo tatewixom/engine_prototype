@@ -28,5 +28,7 @@ public:
   //texture members
   GLuint texture0{};
   GLuint texture1{};
+
+  //matrix members
 };
 
