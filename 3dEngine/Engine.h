@@ -24,5 +24,8 @@ public:
   GLuint VAO{};
   GLuint VBO{};
   GLuint EBO{};
+
+  //texture members
+  GLuint texture0{};
 };
 

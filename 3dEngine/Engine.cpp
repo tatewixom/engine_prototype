@@ -18,7 +18,7 @@ Vertex vertices[] =
   //triangle 2
   //glm::vec3(-0.5f, 0.5f, 0.f),    glm::vec3(1.f, 0.f, 0.f),   glm::vec2(0.f, 1.f),
   //glm::vec3(0.5f, -0.5f, 0.f),    glm::vec3(0.f, 0.f, 1.f),   glm::vec2(1.f, 0.f),
-  glm::vec3(0.5f, 0.5f, 0.f),     glm::vec3(1.f, 1.f, 0.f),   glm::vec2(0.f, 0.f)
+  glm::vec3(0.5f, 0.5f, 0.f),     glm::vec3(1.f, 1.f, 0.f),   glm::vec2(1.f, 1.f)
   
 };
 unsigned nrOfVertices = sizeof(vertices) / sizeof(Vertex);
@@ -36,10 +36,10 @@ unsigned nrOfIndices = sizeof(indices) / sizeof(GLuint);
 
 void Engine::initialize()
 {
-  //init glfw
+  //INIT GLFW
   glfwInit();
 
-  //create window
+  //CREATE WINDOW
   const int WINDOW_WIDTH = 800;
   const int WINDOW_HEIGHT = 600;
   int framebufferWidth = 0;
@@ -60,7 +60,6 @@ void Engine::initialize()
     glfwTerminate();
   }
 
-  //error at framebuffer_resize don't know why. works in main.cpp for whatever reason
   glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
 
   //disabled, enable only if screen is not resizable.
@@ -69,7 +68,7 @@ void Engine::initialize()
 
   glfwMakeContextCurrent(window); //IMPORTANT for glew
 
-  //init glew (glew needs window and opengl context)
+  //INIT GLEW (glew needs window and opengl context)
   glewExperimental = GL_TRUE;
 
   //error
@@ -79,7 +78,7 @@ void Engine::initialize()
     glfwTerminate();
   }
 
-  //opengl options
+  //oOPENGL OPTIONS
   
   //allows us to "access" z coords
   glEnable(GL_DEPTH_TEST);
@@ -96,13 +95,13 @@ void Engine::initialize()
   
   glDisable(GL_LIGHTING);
 
-  //shader init
+  //SHADER INIT
   if (!loadShaders(core_program))
   {
     glfwTerminate();
   }
 
-  //model
+  //MODEL
 
   //VAO, VBO, EBO; these are buffers that hold data to send to graphics card memory
   //initialize VAO; Vertex Array Object
@@ -145,6 +144,42 @@ void Engine::initialize()
 
   //bind VAO 0
   glBindVertexArray(0);
+
+  //TEXTURE INIT
+  int image_width{};
+  int image_height{};
+  unsigned char* image = SOIL_load_image("Assets/Images/analoghorrorface.png", &image_width, &image_height, NULL, SOIL_LOAD_RGBA);
+   
+  glGenTextures(1, &texture0);
+  glBindTexture(GL_TEXTURE_2D, texture0);
+
+  //S and T are basically other names for X and Y
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  //some type of antialiasing when changing size of texture; MAG = Magnification
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  //another filter being applied when making an image smaller; MIN = Minification
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+  //checks to see if there is even a texture to load
+  if (image)
+  {
+    //keep in mind that a char is basically the same as an unsigned byte
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+    //Mipmap is when opengl takes your image to make smaller and
+    //bigger versions of it to auto-adjust how far away you're looking at picture/object
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
+  else
+  {
+    std::cerr << "ERROR::INITIALIZE::TEXTURE_LOADING_FAILED" << '\n';
+  }
+
+  //sets to zero for case of no texture needed to render next run
+  glActiveTexture(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  //removes image data from memory used in SOIL_load_image call
+  SOIL_free_image_data(image);
 }
 
 bool Engine::loadShaders(GLuint& program)
@@ -158,7 +193,7 @@ bool Engine::loadShaders(GLuint& program)
 
   std::ifstream in_file;
 
-  //vertex
+  //VERTEX
   in_file.open("vertex_core.glsl");
 
   //keep in mind that the vertex core flips the image along the y axis (line 15)
@@ -194,7 +229,7 @@ bool Engine::loadShaders(GLuint& program)
   temp = "";
   src = "";
 
-  //fragment
+  //FRAGMENT
   in_file.open("fragment_core.glsl");
 
   if (in_file.is_open())
@@ -229,7 +264,7 @@ bool Engine::loadShaders(GLuint& program)
   temp = "";
   src = "";
   
-  //program
+  //PROGRAM
   program = glCreateProgram();
 
   glAttachShader(program, vertexShader);
@@ -246,7 +281,7 @@ bool Engine::loadShaders(GLuint& program)
     loadSuccess = false;
   }
 
-  //end
+  //END
   glUseProgram(0);
 
   glDeleteShader(vertexShader);
@@ -267,23 +302,36 @@ void Engine::processInput(GLFWwindow* window)
 
 void Engine::render()
 {
-  //draw clear 
+  //DRAW CLEAR 
   glClearColor(0.f, 0.f, 0.f, 1.f); //works in RGBA format
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
   //define what program to use
   glUseProgram(core_program);
 
+  //update uniforms; makes it so the variable 'texture0' is assigned a value
+  glUniform1i(glGetUniformLocation(core_program, "texture0"), 0);
+
+  //activate texture
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture0);
+
   //bind vertex array object
   glBindVertexArray(VAO);
 
-  //draw; define what index we want to start drawing from
+  //DRAW 
+  //define what index we want to start drawing from
   //glDrawArrays(GL_TRIANGLES, 0, nrOfVertices);    //does the same thing, but doesn't use indices
   glDrawElements(GL_TRIANGLES, nrOfIndices, GL_UNSIGNED_INT, 0);
 
-  //end draw
+  //END DRAW
   glfwSwapBuffers(window);
   glFlush();
+  //any value 0 basically means resetting
+  glBindVertexArray(0);
+  glUseProgram(0);
+  glActiveTexture(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Engine::cleanUp()

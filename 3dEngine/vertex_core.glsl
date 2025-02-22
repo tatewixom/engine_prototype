@@ -12,6 +12,7 @@ void main()
 {
   vs_position = vertex_position;
   vs_color = vertex_color;
+  //multiplied by -1.0 because image starts out flipped
   vs_texcoord = vec2(vertex_texcoord.x, vertex_texcoord.y * -1.f);
   
   gl_Position = vec4(vertex_position, 1.f);
