@@ -146,9 +146,11 @@ void Engine::initialize()
   glBindVertexArray(0);
 
   //TEXTURE INIT
+
+  //texture 0
   int image_width{};
   int image_height{};
-  unsigned char* image = SOIL_load_image("Assets/Images/analoghorrorface.png", &image_width, &image_height, NULL, SOIL_LOAD_RGBA);
+  unsigned char* image = SOIL_load_image("Assets/Images/cialogo.png", &image_width, &image_height, NULL, SOIL_LOAD_RGBA);
    
   glGenTextures(1, &texture0);
   glBindTexture(GL_TEXTURE_2D, texture0);
@@ -180,6 +182,42 @@ void Engine::initialize()
   glBindTexture(GL_TEXTURE_2D, 0);
   //removes image data from memory used in SOIL_load_image call
   SOIL_free_image_data(image);
+
+  //texture 1
+  int image_width1{};
+  int image_height1{};
+  unsigned char* image1 = SOIL_load_image("Assets/Images/blankpaper.png", &image_width1, &image_height1, NULL, SOIL_LOAD_RGBA);
+
+  glGenTextures(1, &texture1);
+  glBindTexture(GL_TEXTURE_2D, texture1);
+
+  //S and T are basically other names for X and Y
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  //some type of antialiasing when changing size of texture; MAG = Magnification
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  //another filter being applied when making an image smaller; MIN = Minification
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+  //checks to see if there is even a texture to load
+  if (image1)
+  {
+    //keep in mind that a char is basically the same as an unsigned byte
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width1, image_height1, 0, GL_RGBA, GL_UNSIGNED_BYTE, image1);
+    //Mipmap is when opengl takes your image to make smaller and
+    //bigger versions of it to auto-adjust how far away you're looking at picture/object
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
+  else
+  {
+    std::cerr << "ERROR::INITIALIZE::TEXTURE_LOADING_FAILED" << '\n';
+  }
+
+  //sets to zero for case of no texture needed to render next run
+  glActiveTexture(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  //removes image data from memory used in SOIL_load_image call
+  SOIL_free_image_data(image1);
 }
 
 bool Engine::loadShaders(GLuint& program)
@@ -311,10 +349,13 @@ void Engine::render()
 
   //update uniforms; makes it so the variable 'texture0' is assigned a value
   glUniform1i(glGetUniformLocation(core_program, "texture0"), 0);
+  glUniform1i(glGetUniformLocation(core_program, "texture1"), 1);
 
   //activate texture
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture0);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, texture1);
 
   //bind vertex array object
   glBindVertexArray(VAO);
