@@ -1,11 +1,30 @@
 #include "Engine.h"
 
+//window members
+int framebufferWidth = 0;
+int framebufferHeight = 0;
+
 //matrix members
 glm::mat4 ModelMatrix(1.f);
 
+glm::mat4 ViewMatrix(1.f);
+glm::vec3 camPosition(0.f, 0.f, 1.f);
+glm::vec3 worldUp = glm::vec3(0.f, 1.f, 0.f);
+glm::vec3 camFront = glm::vec3(0.f, 0.f, -1.f);
+
+float fov = 90.f;
+float nearPlane = 0.1f;
+float farPlane = 1000.f;
+glm::mat4 ProjectionMatrix(1.f);
+
+glm::vec3 position(0.f);
+glm::vec3 rotation(0.f);
+glm::vec3 scale(1.f);
+
+
 //non-class functions/arrays
 
-void static framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
+void framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
 {
   glViewport(0, 0, fbW, fbH);
 }
@@ -45,8 +64,7 @@ void Engine::initialize()
   //CREATE WINDOW
   const int WINDOW_WIDTH = 800;
   const int WINDOW_HEIGHT = 600;
-  int framebufferWidth = 0;
-  int framebufferHeight = 0;
+  
 
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -63,10 +81,10 @@ void Engine::initialize()
     glfwTerminate();
   }
 
+  //glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
   glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
 
   //disabled, enable only if screen is not resizable.
-  //glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
   //glViewport(0, 0, framebufferWidth, framebufferHeight);
 
   glfwMakeContextCurrent(window); //IMPORTANT for glew
@@ -222,18 +240,25 @@ void Engine::initialize()
   //removes image data from memory used in SOIL_load_image call
   SOIL_free_image_data(image1);
 
-  //MATRIX
-  ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.f, 0.f, 0.f));
-  //you can choose if you want to rotate along x, y, and/or z axis
-  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(50.f), glm::vec3(1.f, 0.f, 0.f)); //x 
-  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(0.f), glm::vec3(0.f, 1.f, 0.f)); //y
-  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(0.f), glm::vec3(1.f, 0.f, 1.f)); //z
-  ModelMatrix = glm::scale(ModelMatrix, glm::vec3(1.f));
+  //INIT MATRIX
+  ModelMatrix = glm::translate(ModelMatrix, position);
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f)); //x 
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f)); //y
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f)); //z
+  ModelMatrix = glm::scale(ModelMatrix, scale);
 
+  ViewMatrix = glm::lookAt(camPosition, camPosition + camFront, worldUp);
+
+  glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
+  ProjectionMatrix = glm::perspective(glm::radians(fov), static_cast<float>(framebufferWidth / framebufferHeight), nearPlane, farPlane);
+
+  //INIT UNIFORMS
   glUseProgram(core_program);
 
   //GL_FALSE is set to false because that is an option for transposing matrices
   glUniformMatrix4fv(glGetUniformLocation(core_program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+  glUniformMatrix4fv(glGetUniformLocation(core_program, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+  glUniformMatrix4fv(glGetUniformLocation(core_program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 
   glUseProgram(0);
 }
@@ -354,6 +379,34 @@ void Engine::processInput(GLFWwindow* window)
   {
     glfwSetWindowShouldClose(window, true);
   }
+
+  //position
+  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+  {
+    position.z += 0.05f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+  {
+    position.x += 0.01f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+  {
+    position.z -= 0.05f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+  {
+    position.x -= 0.01f;
+  }
+
+  //rotation
+  if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+  {
+    rotation.y -= 1.f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+  {
+    rotation.y += 1.f;
+  }
 }
 
 void Engine::render()
@@ -370,20 +423,24 @@ void Engine::render()
   glUniform1i(glGetUniformLocation(core_program, "texture1"), 1);
 
   //move, rotate, and scale
-  ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.f, 0.f, 0.f));
-  //you can choose if you want to rotate along x, y, and/or z axis
-  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(3.f), glm::vec3(1.f, 0.f, 0.f)); //x 
-  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(2.f), glm::vec3(0.f, 1.f, 0.f)); //y
-  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(5.f), glm::vec3(0.f, 0.f, 1.f)); //z
-  ModelMatrix = glm::scale(ModelMatrix, glm::vec3(1.f));
+  ModelMatrix = glm::mat4(1.f);
+  ModelMatrix = glm::translate(ModelMatrix, position);
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f)); //x 
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f)); //y
+  ModelMatrix = glm::rotate(ModelMatrix, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f)); //z
+  ModelMatrix = glm::scale(ModelMatrix, scale);
 
   glUniformMatrix4fv(glGetUniformLocation(core_program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+
+  glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
+  ProjectionMatrix = glm::perspective(glm::radians(fov), static_cast<float>(framebufferWidth / framebufferHeight), nearPlane, farPlane);
+  glUniformMatrix4fv(glGetUniformLocation(core_program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix)); 
 
   //activate texture
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture0);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, texture1);
+  glBindTexture(GL_TEXTURE_2D, texture1);  
 
   //bind vertex array object
   glBindVertexArray(VAO);
