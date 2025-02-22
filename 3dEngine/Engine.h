@@ -17,7 +17,12 @@ public:
   void run();
 
   //member variables
-  GLFWwindow* window;
-  GLuint core_program;
+  GLFWwindow* window{};
+  GLuint core_program{};
+
+  //buffer arrays
+  GLuint VAO{};
+  GLuint VBO{};
+  GLuint EBO{};
 };
 
