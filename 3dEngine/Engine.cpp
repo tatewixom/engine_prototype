@@ -212,7 +212,7 @@ void Engine::initialize()
   //texture 1
   int image_width1{};
   int image_height1{};
-  unsigned char* image1 = SOIL_load_image("Assets/Images/cardboard.png", &image_width1, &image_height1, NULL, SOIL_LOAD_RGBA);
+  unsigned char* image1 = SOIL_load_image("$(SolutionDir)Assets/Images/cardboard.png", &image_width1, &image_height1, NULL, SOIL_LOAD_RGBA);
 
   glGenTextures(1, &texture1);
   glBindTexture(GL_TEXTURE_2D, texture1);
