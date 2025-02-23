@@ -21,7 +21,7 @@ void main()
 
   //diffuse light
   vec3 posToLightDirVec = normalize(vs_position - lightPos0);
-  vec3 diffuseColor = vec3(1.f, 1.f, 1.f);
+  vec3 diffuseColor = vec3(0.5f, 0.5f, 0.5f);
   float diffuse = clamp(dot(posToLightDirVec, vs_normal), 0, 1);
   vec3 diffuseFinal = diffuseColor * diffuse;
 

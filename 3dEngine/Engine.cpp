@@ -416,9 +416,25 @@ void Engine::processInput(GLFWwindow* window)
   //rotation
   if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
   {
-    rotation.y -= 1.f;
+    rotation.z -= 1.f;
   }
   if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+  {
+    rotation.z += 1.f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+  {
+    rotation.x -= 1.f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+  {
+    rotation.x += 1.f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+  {
+    rotation.y -= 1.f;
+  }
+  if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
   {
     rotation.y += 1.f;
   }
