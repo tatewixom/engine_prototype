@@ -17,16 +17,15 @@ void main()
   //fs_color = vec4(vs_color, 1.f);
 
   //ambient light
-  vec3 ambientLight = vec3(0.1f, 0.1f, 0.1f);
+  vec3 ambientLight = vec3(1.f, 1.f, 1.f);
 
   //diffuse light
   vec3 posToLightDirVec = normalize(vs_position - lightPos0);
-  vec3 diffuseColor = vec3 (1.f, 1.f, 1.f);
+  vec3 diffuseColor = vec3(1.f, 1.f, 1.f);
   float diffuse = clamp(dot(posToLightDirVec, vs_normal), 0, 1);
   vec3 diffuseFinal = diffuseColor * diffuse;
 
   //fs_color = texture(texture0, vs_texcoord) + texture(texture1, vs_texcoord);
 
-  fs_color = 
-  texture(texture0, vs_texcoord) * vec4(vs_color, 1.f) * (vec4(ambientLight, 1.f)) + vec4(diffuseFinal, 1.f);
+  fs_color = texture(texture0, vs_texcoord) * vec4(vs_color, 1.f) * (vec4(ambientLight, 1.f)) + vec4(diffuseFinal, 1.f);
 }

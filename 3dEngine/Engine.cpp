@@ -21,7 +21,7 @@ glm::vec3 position(0.f);
 glm::vec3 rotation(0.f);
 glm::vec3 scale(1.f);
 
-glm::vec3 lightPos0(0.f, 0.f, 2.f);
+glm::vec3 lightPos0(0.f, 0.f, 0.f);
 
 //non-class functions/arrays
 
