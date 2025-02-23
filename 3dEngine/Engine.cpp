@@ -21,6 +21,7 @@ glm::vec3 position(0.f);
 glm::vec3 rotation(0.f);
 glm::vec3 scale(1.f);
 
+glm::vec3 lightPos0(0.f, 0.f, 2.f);
 
 //non-class functions/arrays
 
@@ -33,14 +34,14 @@ Vertex vertices[] =
 {
   //triangle 1
   //position                      //color                     //texcoords
-  glm::vec3(-0.5f, 0.5f, 0.f),    glm::vec3(1.f, 0.f, 0.f),   glm::vec2(0.f, 1.f),
-  glm::vec3(-0.5f ,-0.5f, 0.f),   glm::vec3(0.f, 1.f, 0.f),   glm::vec2(0.f, 0.f),
-  glm::vec3(0.5f, -0.5f, 0.f),    glm::vec3(0.f, 0.f, 1.f),   glm::vec2(1.f, 0.f),
+  glm::vec3(-0.5f, 0.5f, 0.f),    glm::vec3(1.f, 0.f, 0.f),   glm::vec2(0.f, 1.f),    glm::vec3(0.f, 0.f, -1.f),
+  glm::vec3(-0.5f ,-0.5f, 0.f),   glm::vec3(0.f, 1.f, 0.f),   glm::vec2(0.f, 0.f),    glm::vec3(0.f, 0.f, -1.f),
+  glm::vec3(0.5f, -0.5f, 0.f),    glm::vec3(0.f, 0.f, 1.f),   glm::vec2(1.f, 0.f),    glm::vec3(0.f, 0.f, -1.f),
 
   //triangle 2
   //glm::vec3(-0.5f, 0.5f, 0.f),    glm::vec3(1.f, 0.f, 0.f),   glm::vec2(0.f, 1.f),
   //glm::vec3(0.5f, -0.5f, 0.f),    glm::vec3(0.f, 0.f, 1.f),   glm::vec2(1.f, 0.f),
-  glm::vec3(0.5f, 0.5f, 0.f),     glm::vec3(1.f, 1.f, 0.f),   glm::vec2(1.f, 1.f)
+  glm::vec3(0.5f, 0.5f, 0.f),     glm::vec3(1.f, 1.f, 0.f),   glm::vec2(1.f, 1.f), glm::vec3(0.f, 0.f, -1.f)
   
 };
 unsigned nrOfVertices = sizeof(vertices) / sizeof(Vertex);
@@ -99,7 +100,7 @@ void Engine::initialize()
     glfwTerminate();
   }
 
-  //oOPENGL OPTIONS
+  //OPENGL OPTIONS
   
   //allows us to "access" z coords
   glEnable(GL_DEPTH_TEST);
@@ -162,6 +163,10 @@ void Engine::initialize()
   //attribLoc = glGetAttribLocation(core_program, "vertex_color");
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texcoord));
   glEnableVertexAttribArray(2);
+  //normal; at location 3
+  //attribLoc = glGetAttribLocation(core_program, "vertex_color");
+  glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
+  glEnableVertexAttribArray(3);
 
   //bind VAO 0
   glBindVertexArray(0);
@@ -250,7 +255,15 @@ void Engine::initialize()
   ViewMatrix = glm::lookAt(camPosition, camPosition + camFront, worldUp);
 
   glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
-  ProjectionMatrix = glm::perspective(glm::radians(fov), static_cast<float>(framebufferWidth / framebufferHeight), nearPlane, farPlane);
+  int product{};
+  if (framebufferWidth == 0 && framebufferHeight == 0)
+  {
+    ProjectionMatrix = glm::perspective(glm::radians(fov), static_cast<float>(product), nearPlane, farPlane);
+  }
+  else
+  {
+    ProjectionMatrix = glm::perspective(glm::radians(fov), static_cast<float>(framebufferWidth / framebufferHeight), nearPlane, farPlane);
+  }
 
   //INIT UNIFORMS
   glUseProgram(core_program);
@@ -259,6 +272,8 @@ void Engine::initialize()
   glUniformMatrix4fv(glGetUniformLocation(core_program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
   glUniformMatrix4fv(glGetUniformLocation(core_program, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
   glUniformMatrix4fv(glGetUniformLocation(core_program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+
+  glUniform3fv(glGetUniformLocation(core_program, "lightPos0"), 1, glm::value_ptr(lightPos0));
 
   glUseProgram(0);
 }
@@ -433,7 +448,15 @@ void Engine::render()
   glUniformMatrix4fv(glGetUniformLocation(core_program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
 
   glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
-  ProjectionMatrix = glm::perspective(glm::radians(fov), static_cast<float>(framebufferWidth / framebufferHeight), nearPlane, farPlane);
+  int product{};
+  if (framebufferWidth == 0 || framebufferHeight == 0)
+  {
+    ProjectionMatrix = glm::perspective(glm::radians(fov), static_cast<float>(product), nearPlane, farPlane);
+  }
+  else
+  {
+    ProjectionMatrix = glm::perspective(glm::radians(fov), static_cast<float>(framebufferWidth / framebufferHeight), nearPlane, farPlane);
+  }
   glUniformMatrix4fv(glGetUniformLocation(core_program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix)); 
 
   //activate texture
