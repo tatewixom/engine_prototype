@@ -135,12 +135,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cutscene.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="Play.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cutscene.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="libs.h" />
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="Pause.h" />
+    <ClInclude Include="Play.h" />
+    <ClInclude Include="State.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment_core.glsl" />

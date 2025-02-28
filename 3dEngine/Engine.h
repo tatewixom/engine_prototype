@@ -1,34 +1,30 @@
 #pragma once
 
-#include "libs.h"
+#include "State.h"
+#include "Play.h"
+#include "MainMenu.h"
+#include "Pause.h"
 
 class Engine
 {
 private:
 
 public:
+  Engine() = default;
+  ~Engine() = default;
   //non-class functions pre-exist here
 
   void initialize();
-  bool loadShaders(GLuint& program);
-  void processInput(GLFWwindow* window);
+  void processInput();
+  void update();
   void render();
   void cleanUp();
   void run();
 
-  //member variables
+  //VAR
   GLFWwindow* window{};
-  GLuint core_program{};
 
-  //buffer arrays
-  GLuint VAO{};
-  GLuint VBO{};
-  GLuint EBO{};
-
-  //texture members
-  GLuint texture0{};
-  GLuint texture1{};
-
-  //matrix members
+  //class objects
+  State state{};
 };
 
