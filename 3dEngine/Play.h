@@ -1,9 +1,11 @@
 #pragma once
 
 #include "State.h"
+#include "Pause.h"
+#include "CutScene.h"
+#include "IPM.h"
 
 //std
-#include <iostream>
 #include <fstream>
 #include <string>
 
@@ -22,7 +24,7 @@
 class Play : public StateBase
 {
 public:
-  Play() = default;
+  explicit Play(State& manager) : StateBase(manager) {}
   ~Play() = default;
 
   void initialize(GLFWwindow*& window) override;

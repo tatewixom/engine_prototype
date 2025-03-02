@@ -12,10 +12,10 @@ private:
 public:
   Engine() = default;
   ~Engine() = default;
+
   //non-class functions pre-exist here
 
   void initialize();
-  void processInput();
   void update();
   void render();
   void cleanUp();

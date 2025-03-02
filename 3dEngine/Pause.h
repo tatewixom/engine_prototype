@@ -1,11 +1,12 @@
 #pragma once
 
 #include "State.h"
+#include "MainMenu.h"
 
 class Pause : public StateBase
 {
 public:
-  Pause() = default;
+  explicit Pause(State& manager) : StateBase(manager) {}
   ~Pause() = default;
 
   void initialize(GLFWwindow*& window) override;

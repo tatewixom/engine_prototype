@@ -7,7 +7,11 @@ void Cutscene::initialize(GLFWwindow*& window)
 
 void Cutscene::update(GLFWwindow*& window)
 {
-
+  if (IPM::isKeyJustPressed(window, GLFW_KEY_1))
+  {
+    std::cout << "Closing Window...\n";
+    glfwSetWindowShouldClose(window, true);
+  }
 }
 
 void Cutscene::render(GLFWwindow*& window)

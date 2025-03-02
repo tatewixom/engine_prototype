@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="Cutscene.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="IPM.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Pause.cpp" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Cutscene.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="IPM.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Play.h" />

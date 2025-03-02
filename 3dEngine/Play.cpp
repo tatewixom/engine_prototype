@@ -1,7 +1,5 @@
 #include "Play.h"
 
-
-
 //STRUCTS
 
 struct Vertex
@@ -174,7 +172,7 @@ void Play::initialize(GLFWwindow*& window)
   //texture 1
   int image_width1{};
   int image_height1{};
-  unsigned char* image1 = SOIL_load_image("$(SolutionDir)Assets/Images/cardboard.png", &image_width1, &image_height1, NULL, SOIL_LOAD_RGBA);
+  unsigned char* image1 = SOIL_load_image("Assets/Images/cardboard.png", &image_width1, &image_height1, NULL, SOIL_LOAD_RGBA);
 
   glGenTextures(1, &texture1);
   glBindTexture(GL_TEXTURE_2D, texture1);
@@ -198,7 +196,7 @@ void Play::initialize(GLFWwindow*& window)
   }
   else
   {
-    std::cerr << "ERROR::INITIALIZE::TEXTURE_LOADING_FAILED" << '\n';
+    std::cerr << "ERROR::INITIALIZE::TEXTURE_LOADING_FAILED2" << '\n';
   }
 
   //sets to zero for case of no texture needed to render next run
@@ -352,51 +350,57 @@ void Play::update(GLFWwindow*& window)
 {
   glfwPollEvents();
 
-  if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+  if (IPM::isKeyJustPressed(window, GLFW_KEY_1))
   {
+    std::cout << "Closing Window...\n";
     glfwSetWindowShouldClose(window, true);
+  }
+  if (IPM::isKeyJustPressed(window, GLFW_KEY_ESCAPE))
+  {
+    std::cout << "Entering Pause State...\n";
+    stateManager.pushState(std::make_unique<Pause>(stateManager));
   }
 
   //position
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_W))
   {
     position.z += 0.05f;
   }
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_A))
   {
     position.x += 0.01f;
   }
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_S))
   {
     position.z -= 0.05f;
   }
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_D))
   {
     position.x -= 0.01f;
   }
 
   //rotation
-  if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_Q))
   {
     rotation.z -= 1.f;
   }
-  if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_E))
   {
     rotation.z += 1.f;
   }
-  if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_UP))
   {
     rotation.x -= 1.f;
   }
-  if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_DOWN))
   {
     rotation.x += 1.f;
   }
-  if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_LEFT))
   {
     rotation.y -= 1.f;
   }
-  if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+  if (IPM::isKeyPressed(window, GLFW_KEY_RIGHT))
   {
     rotation.y += 1.f;
   }

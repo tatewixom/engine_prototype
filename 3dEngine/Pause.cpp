@@ -3,19 +3,27 @@
 void Pause::initialize(GLFWwindow*& window)
 {
 
+
 }
 
 void Pause::update(GLFWwindow*& window)
 {
   glfwPollEvents();
 
-  if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+  if (IPM::isKeyJustPressed(window, GLFW_KEY_1))
   {
+    std::cout << "Closing Window...\n";
     glfwSetWindowShouldClose(window, true);
   }
-  if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
+  if (IPM::isKeyJustPressed(window, GLFW_KEY_M))
   {
-    
+    stateManager.clearPush(std::make_unique<MainMenu>(stateManager));
+    std::cout << "Entering Menu State...\n";
+  }
+  else if (IPM::isKeyJustPressed(window, GLFW_KEY_ESCAPE))
+  {
+    std::cout << "Entering Play State...\n";
+    stateManager.popState();
   }
 }
 

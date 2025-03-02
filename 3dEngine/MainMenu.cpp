@@ -9,13 +9,13 @@ void static framebuffer_resize_callback(GLFWwindow* window, int fbW, int fbH)
 
 void MainMenu::initialize(GLFWwindow*& window)
 {
+  std::cout << "Initializing Window...\n";
   //INIT GLFW
   glfwInit();
 
   //CREATE WINDOW
   const int WINDOW_WIDTH = 800;
   const int WINDOW_HEIGHT = 600;
-
 
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -72,10 +72,17 @@ void MainMenu::update(GLFWwindow*& window)
 {
   glfwPollEvents();
 
-  if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+  if (IPM::isKeyJustPressed(window, GLFW_KEY_1))
   {
+    std::cout << "Closing Window...\n";
     glfwSetWindowShouldClose(window, true);
   }
+  if (IPM::isKeyJustPressed(window, GLFW_KEY_ENTER))
+  {
+    std::cout << "Entering Play State...\n";
+    stateManager.pushInitialize(window, std::make_unique<Play>(stateManager));
+  }
+
 }
 
 void MainMenu::render(GLFWwindow*& window)
