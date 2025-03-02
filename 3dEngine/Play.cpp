@@ -380,11 +380,11 @@ void Play::update(GLFWwindow*& window)
   }
 
   //rotation
-  if (IPM::isKeyPressed(window, GLFW_KEY_Q))
+  if (IPM::isKeyPressed(window, GLFW_KEY_E))
   {
     rotation.z -= 1.f;
   }
-  if (IPM::isKeyPressed(window, GLFW_KEY_E))
+  if (IPM::isKeyPressed(window, GLFW_KEY_Q))
   {
     rotation.z += 1.f;
   }
