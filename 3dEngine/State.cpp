@@ -12,7 +12,7 @@ void State::cleanUpPush(GLFWwindow*& window, std::unique_ptr<StateBase> newState
   }
   else
   {
-    std::cerr << "ERROR::STATE.CPP::CLEANUPUSH::STACK_IS_EMPTY\n";
+    std::cerr << "ERROR::STATE.CPP::CLEANUPPUSH::STACK_IS_EMPTY\n";
   }
 }
 
@@ -91,6 +91,66 @@ void State::cleanUp(GLFWwindow*& window)
   {
     stateStack.top()->cleanUp(window);
   }
+}
+
+void State::terminateWindow(GLFWwindow*& window)
+{
+  if (!stateStack.empty())
+  {
+    stateStack.top()->terminateWindow(window);
+  }
+}
+
+void State::stackCleanUp(GLFWwindow*& window, std::unique_ptr<StateBase> newState)
+{
+  std::cout << "Cleaning & Clearing States...\n";
+  while (!stateStack.empty())
+  {
+  stateStack.top()->cleanUp(window);
+  stateStack.pop();
+  }
+  if (stateStack.empty())
+  {
+    std::cout << "Finished Cleaning Stack...\n";
+    stateStack.push(std::move(newState));
+  }
+  else
+  {
+    std::cerr << "ERROR::STATE.CPP::STACKCLEANUP::STACK_FAILED_TO_CLEAN\n";
+  }
+}
+
+void State::stackCleanUp(GLFWwindow*& window)
+{
+  std::cout << "Cleaning & Clearing States...\n";
+  if (stateStack.empty())
+  {
+    std::cout << "Stack Already empty...\n";
+    return;
+  }
+  while (!stateStack.empty())
+  {
+    stateStack.top()->cleanUp(window);
+    stateStack.pop();
+  }
+  if (stateStack.empty())
+  {
+    std::cout << "Finished Cleaning Stack...\n";
+  }
+  else
+  {
+    std::cerr << "ERROR::STATE.CPP::STACKCLEANUP::STACK_FAILED_TO_CLEAN\n";
+  }
+}
+
+void State::changeCurrentID(int id)
+{
+  idNumber = id;
+}
+
+int State::getCurrentID() const
+{
+  return idNumber;
 }
 
 bool State::isEmpty() const

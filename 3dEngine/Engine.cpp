@@ -18,7 +18,8 @@ void Engine::render()
 
 void Engine::cleanUp()
 {
-  state.cleanUp(window);
+  state.terminateWindow(window);
+  state.stackCleanUp(window);
 }
 
 void Engine::run()
@@ -28,7 +29,7 @@ void Engine::run()
   while (!glfwWindowShouldClose(window))
   {
     update();
-
+    
     render();
   }
   

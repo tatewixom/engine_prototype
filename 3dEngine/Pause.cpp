@@ -3,7 +3,6 @@
 void Pause::initialize(GLFWwindow*& window)
 {
 
-
 }
 
 void Pause::update(GLFWwindow*& window)
@@ -13,6 +12,7 @@ void Pause::update(GLFWwindow*& window)
   if (IPM::isKeyJustPressed(window, GLFW_KEY_1))
   {
     std::cout << "Closing Window...\n";
+    stateManager.stackCleanUp(window, std::make_unique<Temp>(stateManager));
     glfwSetWindowShouldClose(window, true);
   }
   if (IPM::isKeyJustPressed(window, GLFW_KEY_M))
@@ -42,5 +42,10 @@ void Pause::render(GLFWwindow*& window)
 
 void Pause::cleanUp(GLFWwindow*& window)
 {
+  
+}
 
+void Pause::terminateWindow(GLFWwindow*& window)
+{
+  
 }

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "State.h"
-#include "Play.h"
 #include "MainMenu.h"
-#include "Pause.h"
+#include "Temp.h"
 
+//The mother of all classes. Main caller and game loop reside within here
 class Engine
 {
 private:
@@ -21,10 +21,10 @@ public:
   void cleanUp();
   void run();
 
-  //VAR
+  //Main window object for all updating and rendering
   GLFWwindow* window{};
 
-  //class objects
+  //Engine object for calling all game related functions
   State state{};
 };
 

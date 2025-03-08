@@ -142,7 +142,9 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Play.cpp" />
+    <ClCompile Include="Save.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="Temp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cutscene.h" />
@@ -151,7 +153,9 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Play.h" />
+    <ClInclude Include="Save.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="Temp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment_core.glsl" />

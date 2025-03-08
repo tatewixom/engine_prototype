@@ -1,16 +1,13 @@
 #pragma once
 
 #include "State.h"
-#include "IPM.h"
-#include "Play.h"
-#include "Temp.h"
 
-//Initial class loaded in at start up and is the gateway to all pathways
-class MainMenu : public StateBase
+//Class made as a placeholder for need of a state that is dormant 
+class Temp : public StateBase
 {
 public:
-  explicit MainMenu(State& manager) : StateBase(manager) {}
-  ~MainMenu() = default;
+  explicit Temp(State& manager) : StateBase(manager) {}
+  ~Temp() = default;
 
   void initialize(GLFWwindow*& window) override;
   void update(GLFWwindow*& window) override;

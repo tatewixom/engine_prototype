@@ -353,6 +353,7 @@ void Play::update(GLFWwindow*& window)
   if (IPM::isKeyJustPressed(window, GLFW_KEY_1))
   {
     std::cout << "Closing Window...\n";
+    stateManager.stackCleanUp(window, std::make_unique<Temp>(stateManager));
     glfwSetWindowShouldClose(window, true);
   }
   if (IPM::isKeyJustPressed(window, GLFW_KEY_ESCAPE))
@@ -466,6 +467,12 @@ void Play::render(GLFWwindow*& window)
 }
 
 void Play::cleanUp(GLFWwindow*& window)
+{
+  //delete program
+  glDeleteProgram(core_program);
+}
+
+void Play::terminateWindow(GLFWwindow*& window)
 {
   //end of program
   glfwDestroyWindow(window);

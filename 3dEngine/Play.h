@@ -4,6 +4,7 @@
 #include "Pause.h"
 #include "CutScene.h"
 #include "IPM.h"
+#include "Temp.h"
 
 //std
 #include <fstream>
@@ -21,6 +22,7 @@
 //soil2
 #include <SOIL2.h>
 
+//Class representing the play state and carrying out any gameplay functions
 class Play : public StateBase
 {
 public:
@@ -32,5 +34,6 @@ public:
   void update(GLFWwindow*& window) override;
   void render(GLFWwindow*& window) override;
   void cleanUp(GLFWwindow*& window) override;
+  void terminateWindow(GLFWwindow*& window) override;
 };
 

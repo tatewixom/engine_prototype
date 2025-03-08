@@ -1,16 +1,16 @@
-#include "Cutscene.h"
+#include "Temp.h"
 
-void Cutscene::initialize(GLFWwindow*& window)
+void Temp::initialize(GLFWwindow*& window)
 {
 
 }
 
-void Cutscene::update(GLFWwindow*& window)
+void Temp::update(GLFWwindow*& window)
 {
-  
+
 }
 
-void Cutscene::render(GLFWwindow*& window)
+void Temp::render(GLFWwindow*& window)
 {
   //DRAW CLEAR 
   glClearColor(0.f, 0.f, 0.f, 1.f); //works in RGBA format
@@ -23,12 +23,12 @@ void Cutscene::render(GLFWwindow*& window)
   glFlush();
 }
 
-void Cutscene::cleanUp(GLFWwindow*& window)
+void Temp::cleanUp(GLFWwindow*& window)
 {
 
 }
 
-void Cutscene::terminateWindow(GLFWwindow*& window)
+void Temp::terminateWindow(GLFWwindow*& window)
 {
   //end of program
   glfwDestroyWindow(window);

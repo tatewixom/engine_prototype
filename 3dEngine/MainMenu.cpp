@@ -75,6 +75,7 @@ void MainMenu::update(GLFWwindow*& window)
   if (IPM::isKeyJustPressed(window, GLFW_KEY_1))
   {
     std::cout << "Closing Window...\n";
+    stateManager.stackCleanUp(window, std::make_unique<Temp>(stateManager));
     glfwSetWindowShouldClose(window, true);
   }
   if (IPM::isKeyJustPressed(window, GLFW_KEY_ENTER))
@@ -101,4 +102,11 @@ void MainMenu::render(GLFWwindow*& window)
 void MainMenu::cleanUp(GLFWwindow*& window)
 {
   //nothing to clean up
+}
+
+void MainMenu::terminateWindow(GLFWwindow*& window)
+{
+  //end of program
+  glfwDestroyWindow(window);
+  glfwTerminate();
 }
