@@ -145,6 +145,7 @@
     <ClCompile Include="Save.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Temp.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cutscene.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Save.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Temp.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment_core.glsl" />

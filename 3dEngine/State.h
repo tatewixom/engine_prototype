@@ -26,6 +26,9 @@ public:
   //Pushes new state and immediately calls initialization function
   void pushInitialize(GLFWwindow*& window, std::unique_ptr<StateBase> newState);
 
+  //Pops top of stack, pushes new state, and initializes new state
+  void popInitialize(GLFWwindow*& window, std::unique_ptr<StateBase> newState);
+
   //Clears entire state stack (without cleaning) and pushes new state
   void clearPush(std::unique_ptr<StateBase> newState);
   

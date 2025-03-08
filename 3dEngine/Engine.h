@@ -1,8 +1,7 @@
 #pragma once
 
 #include "State.h"
-#include "MainMenu.h"
-#include "Temp.h"
+#include "Window.h"
 
 //The mother of all classes. Main caller and game loop reside within here
 class Engine

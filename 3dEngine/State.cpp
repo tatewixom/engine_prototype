@@ -18,15 +18,25 @@ void State::cleanUpPush(GLFWwindow*& window, std::unique_ptr<StateBase> newState
 
 void State::pushInitialize(GLFWwindow*& window, std::unique_ptr<StateBase> newState)
 {
-    stateStack.push(std::move(newState));
-    if (!stateStack.empty())
-    {
-      stateStack.top()->initialize(window);
-    }
-    else
-    {
-      std::cerr << "ERROR::STATE.CPP::PUSHINITIALIZE::STACK_EMPTY_AFTER_PUSH\n";
-    }
+  stateStack.push(std::move(newState));
+  if (!stateStack.empty())
+  {
+     stateStack.top()->initialize(window);
+  }
+  else
+  {
+     std::cerr << "ERROR::STATE.CPP::PUSHINITIALIZE::STACK_EMPTY_AFTER_PUSH\n";
+  }
+}
+
+void State::popInitialize(GLFWwindow*& window, std::unique_ptr<StateBase> newState)
+{
+  if (!stateStack.empty())
+  {
+    stateStack.pop();
+  }
+  stateStack.push(std::move(newState));
+  stateStack.top()->initialize(window);
 }
 
 void State::clearPush(std::unique_ptr<StateBase> newState)

@@ -2,7 +2,7 @@
 
 void Engine::initialize()
 {
-  state.changeState(std::make_unique<MainMenu>(state));
+  state.changeState(std::make_unique<Window>(state));
   state.initialize(window);
 }
 
