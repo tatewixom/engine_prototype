@@ -4,6 +4,7 @@
 #include "IPM.h"
 #include "Play.h"
 #include "Temp.h"
+#include "Save.h"
 
 //Initial class loaded in at start up and is the gateway to all pathways
 class MainMenu : public StateBase
